@@ -33,37 +33,10 @@
 
         static void LocationDrawing(int[,] rooms)
         {
-            Console.SetCursorPosition(4, 2);
-            Console.WriteLine("                                   ");
-            Console.SetCursorPosition(4, 3);
-            Console.WriteLine("                                   ");
-            Console.SetCursorPosition(4, 4);
-            Console.WriteLine("                                   ");
-            Console.SetCursorPosition(4, 5);
-            Console.WriteLine("                                   ");
-            Console.SetCursorPosition(4, 6);
-            Console.WriteLine("                                   ");
-            Console.SetCursorPosition(4, 7);
-            Console.WriteLine("                                   ");
-            Console.SetCursorPosition(4, 8);
-            Console.WriteLine("                                   ");
-            Console.SetCursorPosition(4, 9);
-            Console.WriteLine("                                   ");
-            Console.SetCursorPosition(4, 10);
-            Console.WriteLine("                                   ");
-            Console.SetCursorPosition(4, 11);
-            Console.WriteLine("                                   ");
-            Console.SetCursorPosition(4, 12);
-            Console.WriteLine("                                   ");
-            Console.SetCursorPosition(4, 13);
-            Console.WriteLine("                                   ");
-            Console.SetCursorPosition(4, 14);
-            Console.WriteLine("                                   ");
-            Console.SetCursorPosition(4, 15);
-            Console.WriteLine("                                   ");
-            Console.SetCursorPosition(4, 16);
-            Console.WriteLine("                                   ");
-
+            for (int y = 2, y <= 16; ++y) {
+                Console.SetCursorPosition(4, y);
+                Console.WriteLine("                                   ");
+            }
             Console.SetCursorPosition(17, 1);
             if (rooms[room, 0] == -1) {
                 Console.WriteLine("═════════");
