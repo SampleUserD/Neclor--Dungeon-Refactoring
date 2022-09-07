@@ -44,7 +44,7 @@
 
         Console.SetCursorPosition(0, 0);
         Console.WriteLine(
-        @"      |      |      
+            @"      |      |      
   1   |  2   |  3   
       |      |      
 ------+------+------
@@ -82,7 +82,7 @@
         }
 
         while (true) {
-            
+
             Console.SetCursorPosition(0, 11);
             Console.Write("                       ");
             Console.SetCursorPosition(0, 11);
@@ -100,7 +100,7 @@
                 continue;
 
             WriteXO(i, p);
-            m[i] = p;            
+            m[i] = p;
 
             if (Check() == 1) {
                 break;
@@ -122,5 +122,3 @@
         }
     }
 }
-
-
