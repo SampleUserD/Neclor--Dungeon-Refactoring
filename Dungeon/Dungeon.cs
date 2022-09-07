@@ -33,7 +33,7 @@
 
         static void LocationDrawing(int[,] rooms)
         {
-            for (int y = 2, y <= 16; ++y) {
+            for (int y = 2; y <= 16; ++y) {
                 Console.SetCursorPosition(4, y);
                 Console.WriteLine("                                   ");
             }
