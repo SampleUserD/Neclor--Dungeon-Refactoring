@@ -1,9 +1,10 @@
 ﻿using Dungeon.Geometry.Primitives;
 using Dungeon.Geometry.Enumerations;
+using Dungeon.Experimental;
 
 namespace Dungeon;
 
-public class Enemy
+public class Enemy : IEnemy
 {
     private const double OneHalfOfTheStep = 0.5;
 
