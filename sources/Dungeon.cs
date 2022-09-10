@@ -1,5 +1,9 @@
 ﻿namespace Dungeon
 {
+    /**
+     * @description
+     * This class presents a player itself
+     */
     public static class Dungeon
     {
         static Random r = new Random();
