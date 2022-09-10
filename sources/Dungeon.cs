@@ -386,7 +386,7 @@
                 }
 
                 if (room != 0) {
-                    enemies[room].Moving();
+                    enemies[room].Move();
                 }
 
                 System.Threading.Thread.Sleep(100);

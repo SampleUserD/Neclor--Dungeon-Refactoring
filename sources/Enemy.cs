@@ -100,7 +100,7 @@ public class Enemy
      * 
      * @returns {void}
      */
-    public void Moving()
+    public void Move()
     {
         int x = Convert.ToInt32(_position.X);
         int y = Convert.ToInt32(_position.Y);
