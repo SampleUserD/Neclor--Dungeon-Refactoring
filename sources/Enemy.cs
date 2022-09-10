@@ -1,17 +1,11 @@
-﻿namespace Dungeon
-{
-    /**
-     * @description
-     * This class defines an easy interface to the vector in 2d space
-     * 
-     * @param {double} x - coordinate by X
-     * @param {double} y - coordinate by Y
-     */
-    public record Vector(double X, double Y);
+﻿using Dungeon.Geometry.Primitives;
+using Dungeon.Geometry.Enumerations;
 
+namespace Dungeon
+{
     public class Enemy
     {
-        private readonly const double OneHalfOfTheStep = 0.5;
+        private const double OneHalfOfTheStep = 0.5;
 
         private Vector _position = default(Vector);
 
@@ -66,19 +60,19 @@
 
             if (px > x)
             {
-                _position.X += OneHalfOfTheStep;
+                _position = _position + OneHalfOfTheStep * Directions.Right;
             }
             else if (px < x)
             {
-                _position.X -= OneHalfOfTheStep;
+                _position = _position + OneHalfOfTheStep * Directions.Left;
             }
             else if (py > y)
             {
-                _position.Y += OneHalfOfTheStep;
+                _position = _position + OneHalfOfTheStep * Directions.Down;
             }
             else if (py < y)
             {
-                _position.Y -= OneHalfOfTheStep;
+                _position = _position + OneHalfOfTheStep * Directions.Up;
             }
         }
 
@@ -92,7 +86,7 @@
         public void Moving()
         {
             int x = Convert.ToInt32(_position.X);
-            int y = Convery.ToInt32(_position.Y);
+            int y = Convert.ToInt32(_position.Y);
 
             int playerX = Dungeon.MyX;
             int playerY = Dungeon.MyY;
@@ -100,7 +94,7 @@
             if (IsPlayerStaysAtNearbyPosition(playerX, playerY) == true)
             {
                 Dungeon.Lose();
-                return void;
+                return;
             }
 
             Console.SetCursorPosition(x, y);
