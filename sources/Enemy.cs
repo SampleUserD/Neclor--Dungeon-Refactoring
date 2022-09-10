@@ -63,7 +63,7 @@ namespace Dungeon
                 _position = _position + OneHalfOfTheStep * Directions.Right;
             }
             else if (px < x)
-            {
+            {   
                 _position = _position + OneHalfOfTheStep * Directions.Left;
             }
             else if (py > y)
@@ -74,6 +74,23 @@ namespace Dungeon
             {
                 _position = _position + OneHalfOfTheStep * Directions.Up;
             }
+        }
+
+        private void RenderSymbolAt(Vector position, string symbol)
+        {
+            Console.SetCursorPosition(Convert.ToInt32(position.X), Convert.ToInt32(position.Y));
+            Console.WriteLine(symbol);
+            Console.SetCursorPosition(0, 25);
+        }
+
+        private void ClearAt(Vector position)
+        {
+            RenderSymbolAt(position, " ");
+        }
+
+        private void Render()
+        {
+            RenderSymbolAt(_position, "&");
         }
 
         /**
@@ -97,15 +114,9 @@ namespace Dungeon
                 return;
             }
 
-            Console.SetCursorPosition(x, y);
-            Console.WriteLine(" ");
-            Console.SetCursorPosition(0, 25);
-
+            ClearAt(_position);
             ChaseThePlayer(playerX, playerY);
-
-            Console.SetCursorPosition(x, y);
-            Console.WriteLine("&");
-            Console.SetCursorPosition(0, 25);
+            Render();
         }
     }
 }
