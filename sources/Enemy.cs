@@ -1,9 +1,8 @@
 ﻿using Dungeon.Geometry.Primitives;
 using Dungeon.Geometry.Enumerations;
-using Dungeon.Experimental;
+using Dungeon.Testing;
 
 namespace Dungeon;
-
 public class Enemy : IEnemy
 {
     private const double OneHalfOfTheStep = 0.5;
@@ -94,6 +93,11 @@ public class Enemy : IEnemy
         RenderSymbolAt(_position, "&");
     }
 
+    protected sealed override Vector GetPlayerPosition()
+    {
+        return new Vector(Dungeon.MyX, Dungeon.MyY);
+    }
+
     /**
      * @description
      * 1) This method defines a moving strategy
@@ -101,13 +105,15 @@ public class Enemy : IEnemy
      * 
      * @returns {void}
      */
-    public void Move()
+    public override void Move()
     {
         int x = Convert.ToInt32(_position.X);
         int y = Convert.ToInt32(_position.Y);
 
-        int playerX = Dungeon.MyX;
-        int playerY = Dungeon.MyY;
+        var position = GetPlayerPosition();
+
+        int playerX = Convert.ToInt32(position.X);
+        int playerY = Convert.ToInt32(position.Y);
 
         if (IsPlayerStaysAtNearbyPosition(playerX, playerY) == true)
         {
