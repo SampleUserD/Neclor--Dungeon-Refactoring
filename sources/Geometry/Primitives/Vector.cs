@@ -8,6 +8,23 @@ namespace Dungeon.Geometry.Primitives;
  */
 public record Vector(double X, double Y)
 {
+    public double Length() => Math.Sqrt(X * X + Y * Y);
+    public double Dot(Vector other) => this.X * other.X + this.Y * other.Y;
+
+    /// <summary>
+    /// Calculate angle between vector and X-axis as known as direction.
+    /// Angle belongs to interval (0; pi)
+    /// </summary>
+    /// <returns>Angle in radians</returns>
+    public double Direction() => Math.Atan2(this.Y, this.X);
+
+    /// <summary>
+    /// Return angle between current vector and given vector.
+    /// Angle belongs to interval (0; pi)
+    /// </summary>
+    /// <returns>Angle in radians</returns>
+    public double AngleBetween(Vector other) => Math.Acos(Dot(other) / (this.Length() * other.Length()));
+
     public static Vector operator +(Vector left, Vector right)
     {
         return new Vector(left.X + right.X, left.Y + right.Y);
@@ -26,10 +43,5 @@ public record Vector(double X, double Y)
     public static Vector operator *(double coefficient, Vector right)
     {
         return new Vector(coefficient * right.X, coefficient * right.Y);
-    }
-
-    public static double Dot(Vector left, Vector right)
-    {
-        return left.X * right.X + left.Y * right.Y;
     }
 }
