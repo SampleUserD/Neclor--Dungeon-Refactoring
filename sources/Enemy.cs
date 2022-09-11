@@ -97,6 +97,15 @@ public class Enemy : IEnemy
     {
         return new Vector(Dungeon.MyX, Dungeon.MyY);
     }
+    
+    private void CheckOnLoss(int px, int py)
+    {
+        if (IsPlayerStaysAtNearbyPosition(px, py) == true) 
+        {
+            Dungeon.Lose();
+            return;
+        }
+    }
 
     /**
      * @description
@@ -115,11 +124,7 @@ public class Enemy : IEnemy
         int playerX = Convert.ToInt32(position.X);
         int playerY = Convert.ToInt32(position.Y);
 
-        if (IsPlayerStaysAtNearbyPosition(playerX, playerY) == true)
-        {
-            Dungeon.Lose();
-            return;
-        }
+        CheckOnLoss(playerX, playerY);
 
         ClearAt(_position);
         ChaseThePlayer(playerX, playerY);
