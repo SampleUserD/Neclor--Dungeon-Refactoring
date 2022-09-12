@@ -109,6 +109,14 @@ public class Enemy : IEnemy
     {
         return new Vector(Dungeon.MyX, Dungeon.MyY);
     }
+    
+    private void TryKillPlayer(int px, int py)
+    {
+        if (IsPlayerStaysAtNearbyPosition(px, py) == true) {
+            Dungeon.Lose();
+            return;
+        }
+    }
 
 	/// <summary>
 	/// This method defines moving strategy of the enemy
@@ -128,11 +136,7 @@ public class Enemy : IEnemy
         int playerX = Convert.ToInt32(position.X);
         int playerY = Convert.ToInt32(position.Y);
 
-        if (IsPlayerStaysAtNearbyPosition(playerX, playerY) == true)
-        {
-            Dungeon.Lose();
-            return;
-        }
+        TryKillPlayer(playerX, playerY);
 
         ClearAt(_position);
         ChaseThePlayer(playerX, playerY);
