@@ -4,7 +4,7 @@ namespace Dungeon
 {
     public enum PositionType
     {
-		Left = 3,
+	    Left = 3,
 		Right = 1,
 		Top = 0,
 		Bottom = 2
@@ -24,120 +24,120 @@ namespace Dungeon
         private static int rune = 0;
         private static int room = 0;
 
-		/// <summary>
-		///     This method draws horizontal door.
-		/// </summary>
-		/// <remarks>
-		///     <para>If door is type of -1 then it is a wall.<br/></para>
-		///     <para>If door is type of 0 then it is a simple door.<br/></para>
-		///     <para>If door is type of +1 then is is door with key.<br/></para>
-		/// </remarks>
-		/// <param name="rooms">Array of elements of room</param>
-		private static void DrawHorizontalDoor(Position position, int[,] rooms)
-        {
-			var coordinates = position.Coordinate;
-			var type = (int)position.Type;
-
-			int x = Convert.ToInt32(coordinates.X);
-            int y = Convert.ToInt32(coordinates.Y);
-
-			Console.SetCursorPosition(x, y);
-
-			if (rooms[room, type] == -1)
-			{
-				Console.WriteLine("║");
-				Console.SetCursorPosition(x, y + 1);
-				Console.WriteLine("║");
-				Console.SetCursorPosition(x, y + 2);
-				Console.WriteLine("║");
-				Console.SetCursorPosition(x, y + 3);
-				Console.WriteLine("║");
-				Console.SetCursorPosition(x, y + 4);
-				Console.WriteLine("║");
-			}
-			else if (rooms[room, type] >= 0)
-			{
-				Console.WriteLine("╩");
-				Console.SetCursorPosition(x, y + 1);
-				Console.WriteLine(" ");
-				Console.SetCursorPosition(x, y + 2);
-				Console.WriteLine(" ");
-				Console.SetCursorPosition(x, y + 3);
-				Console.WriteLine(" ");
-				Console.SetCursorPosition(x, y + 4);
-				Console.WriteLine("╦");
-			}
-			else
-			{
-				Console.WriteLine("╩");
-				Console.SetCursorPosition(x, y + 1);
-				Console.WriteLine("▒");
-				Console.SetCursorPosition(x, y + 2);
-				Console.WriteLine("@");
-				Console.SetCursorPosition(x, y + 3);
-				Console.WriteLine("▒");
-				Console.SetCursorPosition(x, y + 4);
-				Console.WriteLine("╦");
-			}
-		}
-
-		/// <summary>
-		///     This method vertical draws door.
-		/// </summary>
-		/// <remarks>
-		///     <para>If door is type of -1 then it is a wall.<br/></para>
-		///     <para>If door is type of 0 then it is a simple door.<br/></para>
-		///     <para>If door is type of +1 then is is door with key.<br/></para>
-		/// </remarks>
-		/// <param name="rooms">Array of elements of room</param>
-		private static void DrawVerticalDoor(Position position, int[,] rooms)
+        /// <summary>
+        ///     This method draws horizontal door.
+        /// </summary>
+        /// <remarks>
+        ///     <para>If door is type of -1 then it is a wall.<br/></para>
+        ///     <para>If door is type of 0 then it is a simple door.<br/></para>
+        ///     <para>If door is type of +1 then is is door with key.<br/></para>
+        /// </remarks>
+        /// <param name="rooms">Array of elements of room</param>
+        private static void DrawHorizontalDoor(Position position, int[,] rooms)
         {
             var coordinates = position.Coordinate;
             var type = (int)position.Type;
 
-			Console.SetCursorPosition(Convert.ToInt32(coordinates.X), Convert.ToInt32(coordinates.Y));
+            int x = Convert.ToInt32(coordinates.X);
+            int y = Convert.ToInt32(coordinates.Y);
 
-			if (rooms[room, type] == -1)
-			{
-				Console.WriteLine("═════════");
-			}
-			else if (rooms[room, type] >= 0)
-			{
-				Console.WriteLine("╣       ╠");
-			}
-			else
-			{
-				Console.WriteLine("╣▒▒▒@▒▒▒╠");
-			}
-		}
+            Console.SetCursorPosition(x, y);
 
-		private static void DrawLeftDoor(int[,] rooms)
-		{
-			var position = new Position(new Vector(3, 7), PositionType.Left);
+            if (rooms[room, type] == -1)
+            {
+                Console.WriteLine("║");
+                Console.SetCursorPosition(x, y + 1);
+                Console.WriteLine("║");
+                Console.SetCursorPosition(x, y + 2);
+                Console.WriteLine("║");
+                Console.SetCursorPosition(x, y + 3);
+                Console.WriteLine("║");
+                Console.SetCursorPosition(x, y + 4);
+                Console.WriteLine("║");
+            }
+            else if (rooms[room, type] >= 0)
+            {
+                Console.WriteLine("╩");
+                Console.SetCursorPosition(x, y + 1);
+                Console.WriteLine(" ");
+                Console.SetCursorPosition(x, y + 2);
+                Console.WriteLine(" ");
+                Console.SetCursorPosition(x, y + 3);
+                Console.WriteLine(" ");
+                Console.SetCursorPosition(x, y + 4);
+                Console.WriteLine("╦");
+            }
+            else
+            {
+                Console.WriteLine("╩");
+                Console.SetCursorPosition(x, y + 1);
+                Console.WriteLine("▒");
+                Console.SetCursorPosition(x, y + 2);
+                Console.WriteLine("@");
+                Console.SetCursorPosition(x, y + 3);
+                Console.WriteLine("▒");
+                Console.SetCursorPosition(x, y + 4);
+                Console.WriteLine("╦");
+            }
+        }
 
-			DrawHorizontalDoor(position, rooms);
-		}
+        /// <summary>
+        ///     This method vertical draws door.
+        /// </summary>
+        /// <remarks>
+        ///     <para>If door is type of -1 then it is a wall.<br/></para>
+        ///     <para>If door is type of 0 then it is a simple door.<br/></para>
+        ///     <para>If door is type of +1 then is is door with key.<br/></para>
+        /// </remarks>
+        /// <param name="rooms">Array of elements of room</param>
+        private static void DrawVerticalDoor(Position position, int[,] rooms)
+        {
+            var coordinates = position.Coordinate;
+            var type = (int)position.Type;
 
-		private static void DrawRightDoor(int[,] rooms)
-		{
+            Console.SetCursorPosition(Convert.ToInt32(coordinates.X), Convert.ToInt32(coordinates.Y));
+
+            if (rooms[room, type] == -1)
+            {
+                Console.WriteLine("═════════");
+            }
+            else if (rooms[room, type] >= 0)
+            {
+                Console.WriteLine("╣       ╠");
+            }
+            else
+            {
+                Console.WriteLine("╣▒▒▒@▒▒▒╠");
+            }
+        }
+
+        private static void DrawLeftDoor(int[,] rooms)
+        {
+            var position = new Position(new Vector(3, 7), PositionType.Left);
+
+            DrawHorizontalDoor(position, rooms);
+        }
+
+        private static void DrawRightDoor(int[,] rooms)
+        {
             var position = new Position(new Vector(39, 7), PositionType.Right);
 
-			DrawHorizontalDoor(position, rooms);
-		}
+            DrawHorizontalDoor(position, rooms);
+        }
 
         private static void DrawTopDoor(int[,] rooms)
         {
-			var position = new Position(new Vector(17, 1), PositionType.Top);
+            var position = new Position(new Vector(17, 1), PositionType.Top);
 
-			DrawVerticalDoor(position, rooms);
-		}
+            DrawVerticalDoor(position, rooms);
+        }
 
         private static void DrawBottomDoor(int[,] rooms)
         {
-			var position = new Position(new Vector(17, 17), PositionType.Bottom);
+            var position = new Position(new Vector(17, 17), PositionType.Bottom);
 
-			DrawVerticalDoor(position, rooms);
-		}
+            DrawVerticalDoor(position, rooms);
+        }
 
         /// <summary>
         ///   Creates random seed of the current location
