@@ -76,18 +76,30 @@ public class Enemy : IEnemy
         }
     }
 
-    private void RenderSymbolAt(Vector position, string symbol)
+	/// <summary>
+	/// Renders a symbol on the screen (Console)
+	/// </summary>
+	/// <param name="position">Position of the given symbol on the screen</param>
+	/// <param name="symbol">Symbol that is placed on the screen</param>
+	private void RenderSymbolAt(Vector position, string symbol)
     {
         Console.SetCursorPosition(Convert.ToInt32(position.X), Convert.ToInt32(position.Y));
         Console.WriteLine(symbol);
         Console.SetCursorPosition(0, 25);
     }
 
+    /// <summary>
+    /// Clears a symbol at given position
+    /// </summary>
+    /// <param name="position">Position of the symbol on screen</param>
     private void ClearAt(Vector position)
     {
         RenderSymbolAt(position, " ");
     }
 
+    /// <summary>
+    /// Renders the enemy on the screen at its position
+    /// </summary>
     private void Render()
     {
         RenderSymbolAt(_position, "&");
@@ -98,14 +110,15 @@ public class Enemy : IEnemy
         return new Vector(Dungeon.MyX, Dungeon.MyY);
     }
 
-    /**
-     * @description
-     * 1) This method defines a moving strategy
-     * 2) Renders a enemy on the screen
-     * 
-     * @returns {void}
-     */
-    public override void Move()
+	/// <summary>
+	/// This method defines moving strategy of the enemy
+	/// and renders itself on the screen (Console). 
+	/// </summary>
+	/// <remarks>
+	/// It checks every cycle that "the player is nearby to the enemy"
+	/// and if it is true then it makes the player lose.
+	/// </remarks>
+	public override void Move()
     {
         int x = Convert.ToInt32(_position.X);
         int y = Convert.ToInt32(_position.Y);
