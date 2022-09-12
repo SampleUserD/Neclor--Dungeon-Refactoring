@@ -1,5 +1,16 @@
-﻿namespace Dungeon
+﻿using Dungeon.Geometry.Primitives;
+
+namespace Dungeon
 {
+    public enum PositionType
+    {
+		Left = 3,
+		Right = 1,
+		Top = 0,
+		Bottom = 2
+    }
+
+    public record Position(Vector Coordinate, PositionType Type);
     /**
      * @description
      * This class presents a player itself
@@ -10,10 +21,131 @@
 
         public static int MyX = 21;
         public static int MyY = 9;
-        public static int rune = 0;
-        public static int room = 0;
+        private static int rune = 0;
+        private static int room = 0;
 
-        static int CreateRandomSeed()
+		/// <summary>
+		///     This method draws horizontal door.
+		/// </summary>
+		/// <remarks>
+		///     <para>If door is type of -1 then it is a wall.<br/></para>
+		///     <para>If door is type of 0 then it is a simple door.<br/></para>
+		///     <para>If door is type of +1 then is is door with key.<br/></para>
+		/// </remarks>
+		/// <param name="rooms">Array of elements of room</param>
+		private static void DrawHorizontalDoor(Position position, int[,] rooms)
+        {
+			var coordinates = position.Coordinate;
+			var type = (int)position.Type;
+
+			int x = Convert.ToInt32(coordinates.X);
+            int y = Convert.ToInt32(coordinates.Y);
+
+			Console.SetCursorPosition(x, y);
+
+			if (rooms[room, type] == -1)
+			{
+				Console.WriteLine("║");
+				Console.SetCursorPosition(x, y + 1);
+				Console.WriteLine("║");
+				Console.SetCursorPosition(x, y + 2);
+				Console.WriteLine("║");
+				Console.SetCursorPosition(x, y + 3);
+				Console.WriteLine("║");
+				Console.SetCursorPosition(x, y + 4);
+				Console.WriteLine("║");
+			}
+			else if (rooms[room, type] >= 0)
+			{
+				Console.WriteLine("╩");
+				Console.SetCursorPosition(x, y + 1);
+				Console.WriteLine(" ");
+				Console.SetCursorPosition(x, y + 2);
+				Console.WriteLine(" ");
+				Console.SetCursorPosition(x, y + 3);
+				Console.WriteLine(" ");
+				Console.SetCursorPosition(x, y + 4);
+				Console.WriteLine("╦");
+			}
+			else
+			{
+				Console.WriteLine("╩");
+				Console.SetCursorPosition(x, y + 1);
+				Console.WriteLine("▒");
+				Console.SetCursorPosition(x, y + 2);
+				Console.WriteLine("@");
+				Console.SetCursorPosition(x, y + 3);
+				Console.WriteLine("▒");
+				Console.SetCursorPosition(x, y + 4);
+				Console.WriteLine("╦");
+			}
+		}
+
+		/// <summary>
+		///     This method vertical draws door.
+		/// </summary>
+		/// <remarks>
+		///     <para>If door is type of -1 then it is a wall.<br/></para>
+		///     <para>If door is type of 0 then it is a simple door.<br/></para>
+		///     <para>If door is type of +1 then is is door with key.<br/></para>
+		/// </remarks>
+		/// <param name="rooms">Array of elements of room</param>
+		private static void DrawVerticalDoor(Position position, int[,] rooms)
+        {
+            var coordinates = position.Coordinate;
+            var type = (int)position.Type;
+
+			Console.SetCursorPosition(Convert.ToInt32(coordinates.X), Convert.ToInt32(coordinates.Y));
+
+			if (rooms[room, type] == -1)
+			{
+				Console.WriteLine("═════════");
+			}
+			else if (rooms[room, type] >= 0)
+			{
+				Console.WriteLine("╣       ╠");
+			}
+			else
+			{
+				Console.WriteLine("╣▒▒▒@▒▒▒╠");
+			}
+		}
+
+		private static void DrawLeftDoor(int[,] rooms)
+		{
+			var position = new Position(new Vector(3, 7), PositionType.Left);
+
+			DrawHorizontalDoor(position, rooms);
+		}
+
+		private static void DrawRightDoor(int[,] rooms)
+		{
+            var position = new Position(new Vector(39, 7), PositionType.Right);
+
+			DrawHorizontalDoor(position, rooms);
+		}
+
+        private static void DrawTopDoor(int[,] rooms)
+        {
+			var position = new Position(new Vector(17, 1), PositionType.Top);
+
+			DrawVerticalDoor(position, rooms);
+		}
+
+        private static void DrawBottomDoor(int[,] rooms)
+        {
+			var position = new Position(new Vector(17, 17), PositionType.Bottom);
+
+			DrawVerticalDoor(position, rooms);
+		}
+
+        /// <summary>
+        ///   Creates random seed of the current location
+        /// </summary>
+        /// <remarks>
+        ///   Describe algorithm here
+        /// </remarks>
+		private static int CreateRandomSeed()
         {
             int[] num = { -1, -1, -1, -1 };
             int c = 0;
@@ -35,107 +167,24 @@
             return randomseed;
         }
 
-        static void LocationDrawing(int[,] rooms)
+        /// <summary>
+        /// This method draws location out of rooms
+        /// </summary>
+        /// <param name="rooms"></param>
+        private static void DrawLocation(int[,] rooms)
         {
             for (int y = 2; y <= 16; ++y) {
                 Console.SetCursorPosition(4, y);
                 Console.WriteLine("                                   ");
             }
-            Console.SetCursorPosition(17, 1);
-            if (rooms[room, 0] == -1) {
-                Console.WriteLine("═════════");
-            }
-            else if (rooms[room, 0] >= 0) {
-                Console.WriteLine("╣       ╠");
-            }
-            else {
-                Console.WriteLine("╣▒▒▒@▒▒▒╠");
-            }
 
-            Console.SetCursorPosition(39, 7);
-            if (rooms[room, 1] == -1) {
-                Console.WriteLine("║");
-                Console.SetCursorPosition(39, 8);
-                Console.WriteLine("║");
-                Console.SetCursorPosition(39, 9);
-                Console.WriteLine("║");
-                Console.SetCursorPosition(39, 10);
-                Console.WriteLine("║");
-                Console.SetCursorPosition(39, 11);
-                Console.WriteLine("║");
-            }
-            else if (rooms[room, 1] >= 0) {
-                Console.WriteLine("╩");
-                Console.SetCursorPosition(39, 8);
-                Console.WriteLine(" ");
-                Console.SetCursorPosition(39, 9);
-                Console.WriteLine(" ");
-                Console.SetCursorPosition(39, 10);
-                Console.WriteLine(" ");
-                Console.SetCursorPosition(39, 11);
-                Console.WriteLine("╦");
-            }
-            else {
-                Console.WriteLine("╩");
-                Console.SetCursorPosition(39, 8);
-                Console.WriteLine("▒");
-                Console.SetCursorPosition(39, 9);
-                Console.WriteLine("@");
-                Console.SetCursorPosition(39, 10);
-                Console.WriteLine("▒");
-                Console.SetCursorPosition(39, 11);
-                Console.WriteLine("╦");
-            }
-
-
-            Console.SetCursorPosition(17, 17);
-            if (rooms[room, 2] == -1) {
-                Console.WriteLine("═════════");
-            }
-            else if (rooms[room, 2] >= 0) {
-                Console.WriteLine("╣       ╠");
-            }
-            else {
-                Console.WriteLine("╣▒▒▒@▒▒▒╠");
-            }
-
-            Console.SetCursorPosition(3, 7);
-            if (rooms[room, 3] == -1) {
-                Console.WriteLine("║");
-                Console.SetCursorPosition(3, 8);
-                Console.WriteLine("║");
-                Console.SetCursorPosition(3, 9);
-                Console.WriteLine("║");
-                Console.SetCursorPosition(3, 10);
-                Console.WriteLine("║");
-                Console.SetCursorPosition(3, 11);
-                Console.WriteLine("║");
-            }
-            else if (rooms[room, 3] >= 0) {
-                Console.WriteLine("╩");
-                Console.SetCursorPosition(3, 8);
-                Console.WriteLine(" ");
-                Console.SetCursorPosition(3, 9);
-                Console.WriteLine(" ");
-                Console.SetCursorPosition(3, 10);
-                Console.WriteLine(" ");
-                Console.SetCursorPosition(3, 11);
-                Console.WriteLine("╦");
-            }
-            else {
-                Console.WriteLine("╩");
-                Console.SetCursorPosition(3, 8);
-                Console.WriteLine("▒");
-                Console.SetCursorPosition(3, 9);
-                Console.WriteLine("@");
-                Console.SetCursorPosition(3, 10);
-                Console.WriteLine("▒");
-                Console.SetCursorPosition(3, 11);
-                Console.WriteLine("╦");
-            }
+            DrawLeftDoor(rooms);
+            DrawTopDoor(rooms);
+			DrawRightDoor(rooms);
+            DrawBottomDoor(rooms);
         }
 
-        static void Win()
+        private static void Win()
         {
             Console.Clear();
             Console.SetCursorPosition(0, 5);
@@ -285,7 +334,7 @@
    ║                                   ║               
    ║                                   ║
    ╚═════════════         ═════════════╝");
-            LocationDrawing(rooms);
+			DrawLocation(rooms);
 
             Console.SetCursorPosition(MyX, MyY);
             Console.WriteLine("!");
@@ -311,7 +360,7 @@
                         if (rooms[room, 0] >= 0) {
                             room = rooms[room, 0];
                             MyY = 16;
-                            LocationDrawing(rooms);
+							DrawLocation(rooms);
                         }
                         else if (rooms[room, 0] == -2 && rune == 1) {
                             Win();
@@ -326,7 +375,7 @@
                         if (rooms[room, 1] >= 0) {
                             room = rooms[room, 1];
                             MyX = 4;
-                            LocationDrawing(rooms);
+							DrawLocation(rooms);
                         }
                         else if (rooms[room, 1] == -2 && rune == 1) {
                             Win();
@@ -341,7 +390,7 @@
                         if (rooms[room, 2] >= 0) {
                             room = rooms[room, 2];
                             MyY = 2;
-                            LocationDrawing(rooms);
+							DrawLocation(rooms);
                         }
                         else if (rooms[room, 2] == -2 && rune == 1) {
                             Win();
@@ -356,7 +405,7 @@
                         if (rooms[room, 3] >= 0) {
                             room = rooms[room, 3];
                             MyX = 38;
-                            LocationDrawing(rooms);
+							DrawLocation(rooms);
                         }
                         else if (rooms[room, 3] == -2 && rune == 1) {
                             Win();
