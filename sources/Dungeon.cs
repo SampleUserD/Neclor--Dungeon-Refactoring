@@ -1,4 +1,4 @@
-﻿using Dungeon.Geometry.Primitives;
+using Dungeon.Geometry.Primitives;
 
 namespace Dungeon
 {
@@ -19,7 +19,7 @@ namespace Dungeon
     {
         static Random r = new Random();
 
-        public static int MyX = 21;
+      	public static int MyX = 21;
         public static int MyY = 9;
         private static int rune = 0;
         private static int room = 0;
