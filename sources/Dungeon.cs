@@ -1,4 +1,4 @@
-﻿using Dungeon.Geometry.Primitives;
+using Dungeon.Geometry.Primitives;
 
 namespace Dungeon
 {
@@ -19,7 +19,7 @@ namespace Dungeon
     {
         static Random r = new Random();
 
-        public static int MyX = 21;
+      	public static int MyX = 21;
         public static int MyY = 9;
         private static int rune = 0;
         private static int room = 0;
@@ -90,7 +90,7 @@ namespace Dungeon
 		///     <para>If door is type of +1 then is is door with key.<br/></para>
 		/// </remarks>
 		/// <param name="rooms">Array of elements of room</param>
-		private static void DrawVerticalDoor(Position position, int[,] rooms)
+	    private static void DrawVerticalDoor(Position position, int[,] rooms)
         {
             var coordinates = position.Coordinate;
             var type = (int)position.Type;
