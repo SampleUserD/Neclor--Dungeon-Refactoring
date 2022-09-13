@@ -25,6 +25,40 @@ namespace Dungeon
         private static int room = 0;
 
         /// <summary>
+        ///     This method draws the given symbol at given position
+        /// </summary>
+        /// <param name="coordinate">Coordinate of the given symbol</param>
+        /// <param name="symbol">Rendering symbol</param>
+        private static void RenderSymbolAt(Vector coordinate, char symbol)
+        {
+            var x = Convert.ToInt32(coordinate.X);
+            var y = Convert.ToInt32(coordinate.Y);
+
+            Console.SetCursorPosition(x, y);
+            Console.WriteLine(symbol);
+        }
+
+        private static void RenderSymbolsInHorizontalDirection(Vector coordinate, string symbols)
+        {
+            for (int index = 0, length = symbols.Length; index < length; index++)
+            {
+                var x = Convert.ToInt32(coordinate.X);
+                var y = Convert.ToInt32(coordinate.Y) + index;
+
+                RenderSymbolAt(new Vector(x, y), symbols[index]);
+            }
+        }
+
+        private static void RenderSymbolsInVerticalDirection(Vector coordinate, string symbols)
+        {
+            var x = Convert.ToInt32(coordinate.X);
+            var y = Convert.ToInt32(coordinate.Y);
+
+            Console.SetCursorPosition(x, y);
+            Console.WriteLine(symbols);
+        }
+
+        /// <summary>
         ///     This method draws horizontal door.
         /// </summary>
         /// <remarks>
@@ -38,46 +72,24 @@ namespace Dungeon
             var coordinates = position.Coordinate;
             var type = (int)position.Type;
 
-            int x = Convert.ToInt32(coordinates.X);
-            int y = Convert.ToInt32(coordinates.Y);
-
-            Console.SetCursorPosition(x, y);
+            var x = Convert.ToInt32(coordinates.X);
+            var y = Convert.ToInt32(coordinates.Y);
 
             if (rooms[room, type] == -1)
             {
-                Console.WriteLine("║");
-                Console.SetCursorPosition(x, y + 1);
-                Console.WriteLine("║");
-                Console.SetCursorPosition(x, y + 2);
-                Console.WriteLine("║");
-                Console.SetCursorPosition(x, y + 3);
-                Console.WriteLine("║");
-                Console.SetCursorPosition(x, y + 4);
-                Console.WriteLine("║");
+                RenderSymbolsInHorizontalDirection(new Vector(x, y), "║║║║║");
+            }
+            else if (rooms[room, type] == -2)
+            {
+                RenderSymbolsInHorizontalDirection(new Vector(x, y), "╩▒@▒╦");
             }
             else if (rooms[room, type] >= 0)
             {
-                Console.WriteLine("╩");
-                Console.SetCursorPosition(x, y + 1);
-                Console.WriteLine(" ");
-                Console.SetCursorPosition(x, y + 2);
-                Console.WriteLine(" ");
-                Console.SetCursorPosition(x, y + 3);
-                Console.WriteLine(" ");
-                Console.SetCursorPosition(x, y + 4);
-                Console.WriteLine("╦");
+                RenderSymbolsInHorizontalDirection(new Vector(x, y), "╩   ╦");
             }
             else
             {
-                Console.WriteLine("╩");
-                Console.SetCursorPosition(x, y + 1);
-                Console.WriteLine("▒");
-                Console.SetCursorPosition(x, y + 2);
-                Console.WriteLine("@");
-                Console.SetCursorPosition(x, y + 3);
-                Console.WriteLine("▒");
-                Console.SetCursorPosition(x, y + 4);
-                Console.WriteLine("╦");
+                throw new Exception($"Unsupported unit type: {type}");
             }
         }
 
@@ -95,19 +107,24 @@ namespace Dungeon
             var coordinates = position.Coordinate;
             var type = (int)position.Type;
 
-            Console.SetCursorPosition(Convert.ToInt32(coordinates.X), Convert.ToInt32(coordinates.Y));
+            var x = Convert.ToInt32(coordinates.X);
+            var y = Convert.ToInt32(coordinates.Y);
 
             if (rooms[room, type] == -1)
             {
-                Console.WriteLine("═════════");
+                RenderSymbolsInVerticalDirection(new Vector(x, y), "═════════");
+            }
+            else if (rooms[room, type] == -2)
+            {
+                RenderSymbolsInVerticalDirection(new Vector(x, y), "╣▒▒▒@▒▒▒╠");
             }
             else if (rooms[room, type] >= 0)
             {
-                Console.WriteLine("╣       ╠");
+                RenderSymbolsInVerticalDirection(new Vector(x, y), "╣       ╠");
             }
             else
             {
-                Console.WriteLine("╣▒▒▒@▒▒▒╠");
+                throw new Exception($"Unsupported unit type: {type}");
             }
         }
 
