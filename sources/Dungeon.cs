@@ -4,10 +4,10 @@ namespace Dungeon
 {
     public enum PositionType
     {
-	    Left = 3,
-		Right = 1,
-		Top = 0,
-		Bottom = 2
+        Left = 3,
+        Right = 1,
+        Top = 0,
+        Bottom = 2
     }
 
     public record Position(Vector Coordinate, PositionType Type);
@@ -19,7 +19,7 @@ namespace Dungeon
     {
         static Random r = new Random();
 
-      	public static int MyX = 21;
+        public static int MyX = 21;
         public static int MyY = 9;
         private static int rune = 0;
         private static int room = 0;
@@ -145,7 +145,7 @@ namespace Dungeon
         /// <remarks>
         ///   Describe algorithm here
         /// </remarks>
-		private static int CreateRandomSeed()
+        private static int CreateRandomSeed()
         {
             int[] num = { -1, -1, -1, -1 };
             int c = 0;
@@ -360,7 +360,7 @@ namespace Dungeon
                         if (rooms[room, 0] >= 0) {
                             room = rooms[room, 0];
                             MyY = 16;
-							DrawLocation(rooms);
+                            DrawLocation(rooms);
                         }
                         else if (rooms[room, 0] == -2 && rune == 1) {
                             Win();
@@ -375,7 +375,7 @@ namespace Dungeon
                         if (rooms[room, 1] >= 0) {
                             room = rooms[room, 1];
                             MyX = 4;
-							DrawLocation(rooms);
+                            DrawLocation(rooms);
                         }
                         else if (rooms[room, 1] == -2 && rune == 1) {
                             Win();
@@ -390,7 +390,7 @@ namespace Dungeon
                         if (rooms[room, 2] >= 0) {
                             room = rooms[room, 2];
                             MyY = 2;
-							DrawLocation(rooms);
+                            DrawLocation(rooms);
                         }
                         else if (rooms[room, 2] == -2 && rune == 1) {
                             Win();
@@ -405,7 +405,7 @@ namespace Dungeon
                         if (rooms[room, 3] >= 0) {
                             room = rooms[room, 3];
                             MyX = 38;
-							DrawLocation(rooms);
+                            DrawLocation(rooms);
                         }
                         else if (rooms[room, 3] == -2 && rune == 1) {
                             Win();
