@@ -33,7 +33,7 @@ namespace Dungeon
         ///     <para>If door is type of +1 then is is door with key.<br/></para>
         /// </remarks>
         /// <param name="rooms">Array of elements of room</param>
-        private static void DrawHorizontalDoor(Position position, int[,] rooms)
+        private static void DrawHorizontalUnit(Position position, int[,] rooms)
         {
             var coordinates = position.Coordinate;
             var type = (int)position.Type;
@@ -90,7 +90,7 @@ namespace Dungeon
         ///     <para>If door is type of +1 then is is door with key.<br/></para>
         /// </remarks>
         /// <param name="rooms">Array of elements of room</param>
-        private static void DrawVerticalDoor(Position position, int[,] rooms)
+        private static void DrawVerticalUnit(Position position, int[,] rooms)
         {
             var coordinates = position.Coordinate;
             var type = (int)position.Type;
@@ -111,32 +111,32 @@ namespace Dungeon
             }
         }
 
-        private static void DrawLeftDoor(int[,] rooms)
+        private static void DrawLeftUnit(int[,] rooms)
         {
             var position = new Position(new Vector(3, 7), PositionType.Left);
 
-            DrawHorizontalDoor(position, rooms);
+            DrawHorizontalUnit(position, rooms);
         }
 
-        private static void DrawRightDoor(int[,] rooms)
+        private static void DrawRightUnit(int[,] rooms)
         {
             var position = new Position(new Vector(39, 7), PositionType.Right);
 
-            DrawHorizontalDoor(position, rooms);
+            DrawHorizontalUnit(position, rooms);
         }
 
-        private static void DrawTopDoor(int[,] rooms)
+        private static void DrawTopUnit(int[,] rooms)
         {
             var position = new Position(new Vector(17, 1), PositionType.Top);
 
-            DrawVerticalDoor(position, rooms);
+            DrawVerticalUnit(position, rooms);
         }
 
-        private static void DrawBottomDoor(int[,] rooms)
+        private static void DrawBottomUnit(int[,] rooms)
         {
             var position = new Position(new Vector(17, 17), PositionType.Bottom);
 
-            DrawVerticalDoor(position, rooms);
+            DrawVerticalUnit(position, rooms);
         }
 
         /// <summary>
@@ -178,10 +178,10 @@ namespace Dungeon
                 Console.WriteLine("                                   ");
             }
 
-            DrawLeftDoor(rooms);
-            DrawTopDoor(rooms);
-			DrawRightDoor(rooms);
-            DrawBottomDoor(rooms);
+            DrawLeftUnit(rooms);
+            DrawTopUnit(rooms);
+			DrawRightUnit(rooms);
+            DrawBottomUnit(rooms);
         }
 
         private static void Win()
