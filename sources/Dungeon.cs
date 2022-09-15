@@ -11,21 +11,21 @@ namespace Dungeon
     }
 
     public record Position(Vector Coordinate, PositionType Type);
-    /**
-     * @description
-     * This class presents a player itself
-     */
+   
     public static class Dungeon
     {
-        static Random r = new Random();
+        private static readonly Random r = new Random();
 
-        public static int MyX = 21;
-        public static int MyY = 9;
+        private static readonly Vector Center = new Vector(21, 9);
+
+        public static int MyX = Convert.ToInt32(Center.X);
+        public static int MyY = Convert.ToInt32(Center.Y);
+        
         private static int rune = 0;
         private static int room = 0;
 
         /// <summary>
-        ///     This method draws the given symbol at given position
+        /// This method draws the given symbol at given position
         /// </summary>
         /// <param name="coordinate">Coordinate of the given symbol</param>
         /// <param name="symbol">Rendering symbol</param>
@@ -36,6 +36,15 @@ namespace Dungeon
 
             Console.SetCursorPosition(x, y);
             Console.WriteLine(symbol);
+        }
+        
+        /// <summary>
+        /// Clear symbol at given position
+        /// </summary>
+        /// <param name="position">Given position</param>
+        private static void ClearAt(Vector position)
+        {
+            RenderSymbolAt(position, ' ');
         }
 
         private static void RenderSymbolsInHorizontalDirection(Vector coordinate, string symbols)
@@ -59,7 +68,7 @@ namespace Dungeon
         }
 
         /// <summary>
-        ///     This method draws horizontal door.
+        /// This method draws horizontal door.
         /// </summary>
         /// <remarks>
         ///     <para>If door is type of -1 then it is a wall.<br/></para>
@@ -94,7 +103,7 @@ namespace Dungeon
         }
 
         /// <summary>
-        ///     This method vertical draws door.
+        /// This method vertical draws door.
         /// </summary>
         /// <remarks>
         ///     <para>If door is type of -1 then it is a wall.<br/></para>
@@ -157,7 +166,16 @@ namespace Dungeon
         }
 
         /// <summary>
-        ///   Creates random seed of the current location
+        /// Checks that player wins or not
+        /// </summary>
+        /// <returns>"rune" field</returns>
+        private static bool IsPlayerWin()
+        {
+            return (rune == 1);
+        }
+
+        /// <summary>
+        /// Creates random seed of the current location
         /// </summary>
         /// <remarks>
         ///   Describe algorithm here
@@ -197,8 +215,16 @@ namespace Dungeon
 
             DrawLeftUnit(rooms);
             DrawTopUnit(rooms);
-			DrawRightUnit(rooms);
+            DrawRightUnit(rooms);
             DrawBottomUnit(rooms);
+        }
+
+        /// <summary>
+        /// This method draws player at its current position
+        /// </summary>
+        private static void DrawPlayer()
+        {
+            RenderSymbolAt(new Vector(MyX, MyY), '!');
         }
 
         private static void Win()
@@ -351,13 +377,13 @@ namespace Dungeon
    ║                                   ║               
    ║                                   ║
    ╚═════════════         ═════════════╝");
-			DrawLocation(rooms);
 
-            Console.SetCursorPosition(MyX, MyY);
-            Console.WriteLine("!");
+			DrawLocation(rooms);
+            DrawPlayer();
 
             while (true) {
                 ConsoleKey key = default;
+
                 if (Console.KeyAvailable) {
                     key = Console.ReadKey(true).Key;
                     while (Console.KeyAvailable) {
@@ -365,21 +391,22 @@ namespace Dungeon
                     }
                 }
 
-                Console.SetCursorPosition(MyX, MyY);
-                Console.WriteLine(" ");
-                Console.SetCursorPosition(0, 25);
+                ClearAt(new Vector(MyX, MyY));
 
                 if (key == ConsoleKey.UpArrow) {
                     if (MyY > 2) {
                         MyY--;
                     }
-                    else if (MyX >= 18 && MyX <= 24) {
-                        if (rooms[room, 0] >= 0) {
-                            room = rooms[room, 0];
+                    else if (MyX >= 18 && MyX <= 24) 
+                    {
+                        if (rooms[room, (int)PositionType.Top] >= 0) 
+                        {
+                            room = rooms[room, (int)PositionType.Top];
                             MyY = 16;
                             DrawLocation(rooms);
                         }
-                        else if (rooms[room, 0] == -2 && rune == 1) {
+                        else if (rooms[room, (int)PositionType.Top] == -2 && IsPlayerWin() == true) 
+                        {
                             Win();
                         }
                     }
@@ -388,13 +415,16 @@ namespace Dungeon
                     if (MyX < 38) {
                         MyX++;
                     }
-                    else if (MyY >= 8 && MyY <= 10) {
-                        if (rooms[room, 1] >= 0) {
-                            room = rooms[room, 1];
+                    else if (MyY >= 8 && MyY <= 10) 
+                    {
+                        if (rooms[room, (int)PositionType.Right] >= 0) 
+                        {
+                            room = rooms[room, (int)PositionType.Right];
                             MyX = 4;
                             DrawLocation(rooms);
                         }
-                        else if (rooms[room, 1] == -2 && rune == 1) {
+                        else if (rooms[room, (int)PositionType.Right] == -2 && IsPlayerWin() == true) 
+                        {
                             Win();
                         }
                     }
@@ -403,13 +433,16 @@ namespace Dungeon
                     if (MyY < 16) {
                         MyY++;
                     }
-                    else if (MyX >= 18 && MyX <= 24) {
-                        if (rooms[room, 2] >= 0) {
-                            room = rooms[room, 2];
+                    else if (MyX >= 18 && MyX <= 24) 
+                    {
+                        if (rooms[room, (int)PositionType.Bottom] >= 0) 
+                        {
+                            room = rooms[room, (int)PositionType.Bottom];
                             MyY = 2;
                             DrawLocation(rooms);
                         }
-                        else if (rooms[room, 2] == -2 && rune == 1) {
+                        else if (rooms[room, (int)PositionType.Bottom] == -2 && IsPlayerWin() == true) 
+                        {
                             Win();
                         }
                     }
@@ -419,20 +452,20 @@ namespace Dungeon
                         MyX--;
                     }
                     else if (MyY >= 8 && MyY <= 10) {
-                        if (rooms[room, 3] >= 0) {
-                            room = rooms[room, 3];
+                        if (rooms[room, (int)PositionType.Left] >= 0) 
+                        {
+                            room = rooms[room, (int)PositionType.Left];
                             MyX = 38;
                             DrawLocation(rooms);
                         }
-                        else if (rooms[room, 3] == -2 && rune == 1) {
+                        else if (rooms[room, (int)PositionType.Left] == -2 && IsPlayerWin() == true) 
+                        {
                             Win();
                         }
                     }
                 }
 
-                Console.SetCursorPosition(MyX, MyY);
-                Console.WriteLine("!");
-                Console.SetCursorPosition(0, 25);
+                DrawPlayer();
 
                 if (rune == 0 && room == Convert.ToInt32(seed.Substring(Convert.ToInt32(seed.Substring(0, 1)) + 2, 1))) {
                     if (MyX == 21 && MyY == 9) {
