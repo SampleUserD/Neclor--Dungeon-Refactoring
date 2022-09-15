@@ -1,4 +1,5 @@
 using Dungeon.Geometry.Primitives;
+using Dungeon.Geometry.Enumerations;
 
 namespace Dungeon
 {
@@ -16,6 +17,10 @@ namespace Dungeon
     {
         private static readonly Random r = new Random();
 
+        private static readonly Vector LeftBound = new Vector(3, 7);
+        private static readonly Vector RightBound = new Vector(39, 7);
+        private static readonly Vector TopBound = new Vector(17, 1);
+        private static readonly Vector BottomBound = new Vector(17, 17);
         private static readonly Vector Center = new Vector(21, 9);
 
         public static int MyX = Convert.ToInt32(Center.X);
@@ -139,30 +144,112 @@ namespace Dungeon
 
         private static void DrawLeftUnit(int[,] rooms)
         {
-            var position = new Position(new Vector(3, 7), PositionType.Left);
+            var position = new Position(LeftBound, PositionType.Left);
 
             DrawHorizontalUnit(position, rooms);
         }
 
         private static void DrawRightUnit(int[,] rooms)
         {
-            var position = new Position(new Vector(39, 7), PositionType.Right);
+            var position = new Position(RightBound, PositionType.Right);
 
             DrawHorizontalUnit(position, rooms);
         }
 
         private static void DrawTopUnit(int[,] rooms)
         {
-            var position = new Position(new Vector(17, 1), PositionType.Top);
+            var position = new Position(TopBound, PositionType.Top);
 
             DrawVerticalUnit(position, rooms);
         }
 
         private static void DrawBottomUnit(int[,] rooms)
         {
-            var position = new Position(new Vector(17, 17), PositionType.Bottom);
+            var position = new Position(BottomBound, PositionType.Bottom);
 
             DrawVerticalUnit(position, rooms);
+        }
+
+        private static void DrawLocationLayout()
+        {
+            Console.WriteLine(@"
+   ╔═════════════         ═════════════╗
+   ║                                   ║
+   ║                                   ║
+   ║                                   ║
+   ║                                   ║
+   ║                                   ║
+                                       
+                                                       
+                                                          
+                                                            
+                                       
+   ║                                   ║
+   ║                                   ║
+   ║                                   ║
+   ║                                   ║               
+   ║                                   ║
+   ╚═════════════         ═════════════╝");
+
+        }
+
+        /// <summary>
+        /// This method draws location out of rooms
+        /// </summary>
+        /// <param name="rooms">Array of rooms</param>
+        private static void DrawLocation(int[,] rooms)
+        {
+            for (int y = 2; y <= 16; ++y)
+            {
+                Console.SetCursorPosition(4, y);
+                Console.WriteLine("                                   ");
+            }
+
+            DrawLeftUnit(rooms);
+            DrawTopUnit(rooms);
+            DrawRightUnit(rooms);
+            DrawBottomUnit(rooms);
+        }
+
+        /// <summary>
+        /// Get door's type at given position
+        /// </summary>
+        /// <param name="rooms">Array of rooms</param>
+        /// <param name="type">Given position</param>
+        private static int GetDoorTypeInCurrentRoomAt(int[,] rooms, PositionType type)
+        {
+            return rooms[room, (int)type];
+        }
+
+        /// <summary>
+        /// Checks there is the simple door at given position or not 
+        /// (simple means with no rune, but no wall)
+        /// </summary>
+        /// <param name="rooms">Array of rooms</param>
+        /// <param name="type">Given position</param>
+        private static bool IsDoorSimpleInCurrentRoomAt(int[,] rooms, PositionType type)
+        {
+            return GetDoorTypeInCurrentRoomAt(rooms, type) >= 0;
+        }
+
+        /// <summary>
+        /// Checks there is the wall at given position or not
+        /// </summary>
+        /// <param name="rooms">Array of rooms</param>
+        /// <param name="type">Given position</param>
+        private static bool IsWallInCurrentRoomAt(int[,] rooms, PositionType type)
+        {
+            return GetDoorTypeInCurrentRoomAt(rooms, type) == -1;
+        }
+
+        /// <summary>
+        /// Checks there is the door with rune at given position or not
+        /// </summary>
+        /// <param name="rooms">Array of rooms</param>
+        /// <param name="type">Given position</param>
+        private static bool IsDoorWithRuneInCurrentRoomAt(int[,] rooms, PositionType type)
+        {
+            return GetDoorTypeInCurrentRoomAt(rooms, type) == -2;
         }
 
         /// <summary>
@@ -172,6 +259,87 @@ namespace Dungeon
         private static bool IsPlayerWin()
         {
             return (rune == 1);
+        }
+
+        /// <summary>
+        /// Check if the player is out of left bound
+        /// </summary>
+        private static bool IsPlayerOutOfLeftBound()
+        {
+            return MyX + Directions.Left.X > LeftBound.X;
+        }
+
+        /// <summary>
+        /// Check if the player is out of right bound
+        /// </summary>
+        private static bool IsPlayerOutOfRightBound()
+        {
+            return MyX + Directions.Right.X < RightBound.X;
+        }
+
+        /// <summary>
+        /// Check if the player is out of top bound
+        /// </summary>
+        private static bool IsPlayerOutOfTopBound()
+        {
+            return MyY + Directions.Up.Y > TopBound.Y;
+        }
+
+        /// <summary>
+        /// Check if the player is out of bottom bound
+        /// </summary>
+        private static bool IsPlayerOutOfBottomBound()
+        {
+            return MyY + Directions.Down.Y < BottomBound.Y;
+        }
+
+        /// <summary>
+        /// Check if the player passes through one of the vertical doors
+        /// </summary>
+        private static bool IsPlayerPassThroughVerticalDoor()
+        {
+            return (MyX >= 18 && MyX <= 24);
+        }
+
+        /// <summary>
+        /// Check if the player passes through one of the horizontal doors
+        /// </summary>
+        private static bool IsPlayerPassThroughHorizontalDoor()
+        {
+            return (MyY >= 8 && MyY <= 10);
+        }
+
+        /// <summary>
+        /// Checks player can pass through the rune door (beat the game) or not
+        /// </summary>
+        /// <param name="rooms">Array of rooms</param>
+        /// <param name="type">Given position</param>
+        /// <returns></returns>
+        private static bool CanPlayerPassThroughTheRuneDoorAt(int[,] rooms, PositionType type)
+        {
+            return 
+                IsDoorWithRuneInCurrentRoomAt(rooms, type) == true &&
+                IsPlayerWin() == true;
+        }
+
+        /// <summary>
+        /// Describes strategy of movement of the player
+        /// </summary>
+        /// <param name="direction">Direction of movement</param>
+        private static void Move(Vector direction)
+        {
+            MyX += Convert.ToInt32(direction.X);
+            MyY += Convert.ToInt32(direction.Y);
+        }
+
+        /// <summary>
+        /// Translate player to the point
+        /// </summary>
+        /// <param name="point">Translation point</param>
+        private static void MoveTo(Vector point)
+        {
+            MyX = Convert.ToInt32(point.X);
+            MyY = Convert.ToInt32(point.Y);
         }
 
         /// <summary>
@@ -200,23 +368,6 @@ namespace Dungeon
             randomseed = randomseed * 100 + r.Next(1, Convert.ToInt32(Convert.ToString(randomseed).Substring(0, 1)) + 1) * 10 + r.Next(1, Convert.ToInt32(Convert.ToString(randomseed).Substring(0, 1)) + 1);
 
             return randomseed;
-        }
-
-        /// <summary>
-        /// This method draws location out of rooms
-        /// </summary>
-        /// <param name="rooms"></param>
-        private static void DrawLocation(int[,] rooms)
-        {
-            for (int y = 2; y <= 16; ++y) {
-                Console.SetCursorPosition(4, y);
-                Console.WriteLine("                                   ");
-            }
-
-            DrawLeftUnit(rooms);
-            DrawTopUnit(rooms);
-            DrawRightUnit(rooms);
-            DrawBottomUnit(rooms);
         }
 
         /// <summary>
@@ -359,29 +510,13 @@ namespace Dungeon
             }
 
             Console.CursorVisible = false;
-            Console.WriteLine(@"
-   ╔═════════════         ═════════════╗
-   ║                                   ║
-   ║                                   ║
-   ║                                   ║
-   ║                                   ║
-   ║                                   ║
-                                       
-                                                       
-                                                          
-                                                            
-                                       
-   ║                                   ║
-   ║                                   ║
-   ║                                   ║
-   ║                                   ║               
-   ║                                   ║
-   ╚═════════════         ═════════════╝");
-
+            
+            DrawLocationLayout();
 			DrawLocation(rooms);
             DrawPlayer();
 
-            while (true) {
+            while (true) 
+            {
                 ConsoleKey key = default;
 
                 if (Console.KeyAvailable) {
@@ -393,72 +528,85 @@ namespace Dungeon
 
                 ClearAt(new Vector(MyX, MyY));
 
-                if (key == ConsoleKey.UpArrow) {
-                    if (MyY > 2) {
-                        MyY--;
-                    }
-                    else if (MyX >= 18 && MyX <= 24) 
+                if (key == ConsoleKey.UpArrow) 
+                {
+                    if (IsPlayerOutOfTopBound() == true) 
                     {
-                        if (rooms[room, (int)PositionType.Top] >= 0) 
+                        Move(Directions.Up);
+                    }
+                    else if (IsPlayerPassThroughVerticalDoor() == true) 
+                    {
+                        if (IsDoorSimpleInCurrentRoomAt(rooms, PositionType.Top) == true) 
                         {
-                            room = rooms[room, (int)PositionType.Top];
-                            MyY = 16;
+                            room = GetDoorTypeInCurrentRoomAt(rooms, PositionType.Top);
+
+                            MoveTo(new Vector(MyX, BottomBound.Y - Directions.Down.Y));
                             DrawLocation(rooms);
                         }
-                        else if (rooms[room, (int)PositionType.Top] == -2 && IsPlayerWin() == true) 
+                        else if (CanPlayerPassThroughTheRuneDoorAt(rooms, PositionType.Top) == true) 
                         {
                             Win();
                         }
                     }
                 }
-                else if (key == ConsoleKey.RightArrow) {
-                    if (MyX < 38) {
-                        MyX++;
-                    }
-                    else if (MyY >= 8 && MyY <= 10) 
+                else if (key == ConsoleKey.RightArrow) 
+                {
+                    if (IsPlayerOutOfRightBound() == true) 
                     {
-                        if (rooms[room, (int)PositionType.Right] >= 0) 
+                        Move(Directions.Right);
+                    }
+                    else if (IsPlayerPassThroughHorizontalDoor() == true) 
+                    {
+                        if (IsDoorSimpleInCurrentRoomAt(rooms, PositionType.Right) == true) 
                         {
-                            room = rooms[room, (int)PositionType.Right];
-                            MyX = 4;
+                            room = GetDoorTypeInCurrentRoomAt(rooms, PositionType.Right);
+
+                            MoveTo(new Vector(LeftBound.X - Directions.Left.X, MyY));
                             DrawLocation(rooms);
                         }
-                        else if (rooms[room, (int)PositionType.Right] == -2 && IsPlayerWin() == true) 
+                        else if (CanPlayerPassThroughTheRuneDoorAt(rooms, PositionType.Right) == true) 
                         {
                             Win();
                         }
                     }
                 }
-                else if (key == ConsoleKey.DownArrow) {
-                    if (MyY < 16) {
-                        MyY++;
-                    }
-                    else if (MyX >= 18 && MyX <= 24) 
+                else if (key == ConsoleKey.DownArrow) 
+                {
+                    if (IsPlayerOutOfBottomBound() == true) 
                     {
-                        if (rooms[room, (int)PositionType.Bottom] >= 0) 
+                        Move(Directions.Down);
+                    } 
+                    else if (IsPlayerPassThroughVerticalDoor() == true) 
+                    {
+                        if (IsDoorSimpleInCurrentRoomAt(rooms, PositionType.Bottom) == true) 
                         {
-                            room = rooms[room, (int)PositionType.Bottom];
-                            MyY = 2;
+                            room = GetDoorTypeInCurrentRoomAt(rooms, PositionType.Bottom);
+
+                            MoveTo(new Vector(MyX, TopBound.Y - Directions.Up.Y));
                             DrawLocation(rooms);
                         }
-                        else if (rooms[room, (int)PositionType.Bottom] == -2 && IsPlayerWin() == true) 
+                        else if (CanPlayerPassThroughTheRuneDoorAt(rooms, PositionType.Bottom) == true) 
                         {
                             Win();
                         }
                     }
                 }
-                else if (key == ConsoleKey.LeftArrow) {
-                    if (MyX > 4) {
-                        MyX--;
+                else if (key == ConsoleKey.LeftArrow) 
+                {
+                    if (IsPlayerOutOfLeftBound() == true)
+                    {
+                        Move(Directions.Left);
                     }
-                    else if (MyY >= 8 && MyY <= 10) {
-                        if (rooms[room, (int)PositionType.Left] >= 0) 
+                    else if (IsPlayerPassThroughHorizontalDoor() == true) 
+                    {
+                        if (IsDoorSimpleInCurrentRoomAt(rooms, PositionType.Left) == true) 
                         {
-                            room = rooms[room, (int)PositionType.Left];
-                            MyX = 38;
+                            room = GetDoorTypeInCurrentRoomAt(rooms, PositionType.Left);
+
+                            MoveTo(new Vector(RightBound.X - Directions.Right.X, MyY));
                             DrawLocation(rooms);
                         }
-                        else if (rooms[room, (int)PositionType.Left] == -2 && IsPlayerWin() == true) 
+                        else if (CanPlayerPassThroughTheRuneDoorAt(rooms, PositionType.Left) == true) 
                         {
                             Win();
                         }
