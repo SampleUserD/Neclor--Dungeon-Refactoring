@@ -336,10 +336,20 @@ namespace Dungeon
         /// Translate player to the point
         /// </summary>
         /// <param name="point">Translation point</param>
-        private static void MoveTo(Vector point)
+        private static void GoTo(Vector point)
         {
             MyX = Convert.ToInt32(point.X);
             MyY = Convert.ToInt32(point.Y);
+        }
+
+        /// <summary>
+        /// Moves player to room at given position
+        /// </summary>
+        /// <param name="rooms">Array of rooms</param>
+        /// <param name="type">Position of the door</param>
+        private static void GoToRoomAt(int[,] rooms, PositionType type)
+        {
+            room = GetDoorTypeInCurrentRoomAt(rooms, type);
         }
 
         /// <summary>
@@ -512,7 +522,7 @@ namespace Dungeon
             Console.CursorVisible = false;
             
             DrawLocationLayout();
-			DrawLocation(rooms);
+            DrawLocation(rooms);
             DrawPlayer();
 
             while (true) 
@@ -538,9 +548,9 @@ namespace Dungeon
                     {
                         if (IsDoorSimpleInCurrentRoomAt(rooms, PositionType.Top) == true) 
                         {
-                            room = GetDoorTypeInCurrentRoomAt(rooms, PositionType.Top);
+                            GoToRoomAt(rooms, PositionType.Top);
+                            GoTo(new Vector(MyX, BottomBound.Y - Directions.Down.Y));
 
-                            MoveTo(new Vector(MyX, BottomBound.Y - Directions.Down.Y));
                             DrawLocation(rooms);
                         }
                         else if (CanPlayerPassThroughTheRuneDoorAt(rooms, PositionType.Top) == true) 
@@ -559,9 +569,9 @@ namespace Dungeon
                     {
                         if (IsDoorSimpleInCurrentRoomAt(rooms, PositionType.Right) == true) 
                         {
-                            room = GetDoorTypeInCurrentRoomAt(rooms, PositionType.Right);
+                            GoToRoomAt(rooms, PositionType.Right);
+                            GoTo(new Vector(LeftBound.X - Directions.Left.X, MyY));
 
-                            MoveTo(new Vector(LeftBound.X - Directions.Left.X, MyY));
                             DrawLocation(rooms);
                         }
                         else if (CanPlayerPassThroughTheRuneDoorAt(rooms, PositionType.Right) == true) 
@@ -580,9 +590,9 @@ namespace Dungeon
                     {
                         if (IsDoorSimpleInCurrentRoomAt(rooms, PositionType.Bottom) == true) 
                         {
-                            room = GetDoorTypeInCurrentRoomAt(rooms, PositionType.Bottom);
+                            GoToRoomAt(rooms, PositionType.Bottom);
+                            GoTo(new Vector(MyX, TopBound.Y - Directions.Up.Y));
 
-                            MoveTo(new Vector(MyX, TopBound.Y - Directions.Up.Y));
                             DrawLocation(rooms);
                         }
                         else if (CanPlayerPassThroughTheRuneDoorAt(rooms, PositionType.Bottom) == true) 
@@ -601,9 +611,9 @@ namespace Dungeon
                     {
                         if (IsDoorSimpleInCurrentRoomAt(rooms, PositionType.Left) == true) 
                         {
-                            room = GetDoorTypeInCurrentRoomAt(rooms, PositionType.Left);
+                            GoToRoomAt(rooms, PositionType.Left);
+                            GoTo(new Vector(RightBound.X - Directions.Right.X, MyY));
 
-                            MoveTo(new Vector(RightBound.X - Directions.Right.X, MyY));
                             DrawLocation(rooms);
                         }
                         else if (CanPlayerPassThroughTheRuneDoorAt(rooms, PositionType.Left) == true) 
