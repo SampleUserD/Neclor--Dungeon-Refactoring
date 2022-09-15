@@ -170,6 +170,21 @@ namespace Dungeon
             DrawVerticalUnit(position, rooms);
         }
 
+        private static void DrawRoomInnerContent()
+        {
+            var x_0 = Convert.ToInt32(LeftBound.X - Directions.Left.X);
+            var x_1 = Convert.ToInt32(RightBound.X - Directions.Right.X);
+            var y_0 = Convert.ToInt32(TopBound.Y - Directions.Up.Y);
+            var y_1 = Convert.ToInt32(BottomBound.Y - Directions.Down.Y);
+
+            var l_x = Convert.ToInt32(Math.Abs(x_1 - x_0));
+
+            for (int y = y_0; y <= y_1; ++y)
+            {
+                Console.SetCursorPosition(x_0, y);
+                Console.WriteLine(new string(' ', l_x)); // 36
+            }
+        }
         private static void DrawLocationLayout()
         {
             Console.WriteLine(@"
@@ -199,16 +214,20 @@ namespace Dungeon
         /// <param name="rooms">Array of rooms</param>
         private static void DrawLocation(int[,] rooms)
         {
-            for (int y = 2; y <= 16; ++y)
-            {
-                Console.SetCursorPosition(4, y);
-                Console.WriteLine("                                   ");
-            }
+            DrawRoomInnerContent();
 
             DrawLeftUnit(rooms);
             DrawTopUnit(rooms);
             DrawRightUnit(rooms);
             DrawBottomUnit(rooms);
+        }
+
+        /// <summary>
+        /// This method draws player at its current position
+        /// </summary>
+        private static void DrawPlayer()
+        {
+            RenderSymbolAt(new Vector(MyX, MyY), '!');
         }
 
         /// <summary>
@@ -378,14 +397,6 @@ namespace Dungeon
             randomseed = randomseed * 100 + r.Next(1, Convert.ToInt32(Convert.ToString(randomseed).Substring(0, 1)) + 1) * 10 + r.Next(1, Convert.ToInt32(Convert.ToString(randomseed).Substring(0, 1)) + 1);
 
             return randomseed;
-        }
-
-        /// <summary>
-        /// This method draws player at its current position
-        /// </summary>
-        private static void DrawPlayer()
-        {
-            RenderSymbolAt(new Vector(MyX, MyY), '!');
         }
 
         private static void Win()
