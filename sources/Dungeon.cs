@@ -185,6 +185,7 @@ namespace Dungeon
                 Console.WriteLine(new string(' ', l_x)); // 36
             }
         }
+
         private static void DrawLocationLayout()
         {
             Console.WriteLine(@"
