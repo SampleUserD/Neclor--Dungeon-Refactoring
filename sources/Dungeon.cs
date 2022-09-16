@@ -17,17 +17,40 @@ namespace Dungeon
     {
         private static readonly Random r = new Random();
 
-        private static readonly Vector LeftBound = new Vector(3, 7);
-        private static readonly Vector RightBound = new Vector(39, 7);
-        private static readonly Vector TopBound = new Vector(17, 1);
-        private static readonly Vector BottomBound = new Vector(17, 17);
-        private static readonly Vector Center = new Vector(21, 9);
+        private static readonly int Width = 36;
+        private static readonly int Height = 16;
 
-        public static int MyX = Convert.ToInt32(Center.X);
-        public static int MyY = Convert.ToInt32(Center.Y);
+        private static readonly Vector LeftTopCorner = new(3, 1);
+        private static readonly Vector LeftBottomCorner = new(LeftTopCorner.X, LeftTopCorner.Y + Height);
+        private static readonly Vector RightTopCorner = new(LeftTopCorner.X + Width, LeftTopCorner.Y);
+        private static readonly Vector RightBottomCorner = new(LeftTopCorner.X + Width, LeftTopCorner.Y + Height);
+        private static readonly Vector Center = new(LeftTopCorner.X + Width / 2, LeftTopCorner.Y + Height / 2);
+
+        private static readonly Vector LeftBound = new(3, 7);
+        private static readonly Vector TopBound = new(17, 1);
+
+        /// <summary>
+        /// The right bound is symmetrical to the left bound in relation to the center
+        /// </summary>
+        private static readonly Vector RightBound = new(LeftBound.X + Width, LeftBound.Y);
+
+        /// <summary>
+        /// The bottom bound is symmetrical to the top bound in relation to the center
+        /// </summary>
+        private static readonly Vector BottomBound = new(TopBound.X, TopBound.Y + Height);
         
         private static int rune = 0;
         private static int room = 0;
+
+        /// <summary>
+        /// This is the integer coordinate of the player by X-axis
+        /// </summary>
+        public static int MyX = Convert.ToInt32(Center.X);
+
+        /// <summary>
+        /// This is the integer coordinate of the player by Y-axis
+        /// </summary>
+        public static int MyY = Convert.ToInt32(Center.Y);
 
         /// <summary>
         /// This method draws the given symbol at given position
@@ -173,16 +196,16 @@ namespace Dungeon
         private static void DrawRoomInnerContent()
         {
             var x_0 = Convert.ToInt32(LeftBound.X - Directions.Left.X);
-            var x_1 = Convert.ToInt32(RightBound.X - Directions.Right.X);
+            var x_1 = Convert.ToInt32(RightBound.X - Directions.Right.Y);
             var y_0 = Convert.ToInt32(TopBound.Y - Directions.Up.Y);
             var y_1 = Convert.ToInt32(BottomBound.Y - Directions.Down.Y);
 
-            var l_x = Convert.ToInt32(Math.Abs(x_1 - x_0));
+            var width = Math.Abs(x_1 - x_0);
 
             for (int y = y_0; y <= y_1; ++y)
             {
                 Console.SetCursorPosition(x_0, y);
-                Console.WriteLine(new string(' ', l_x)); // 36
+                Console.WriteLine(new string(' ', width));
             }
         }
 
