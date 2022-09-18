@@ -255,6 +255,23 @@ namespace Dungeon
         }
 
         /// <summary>
+        /// This method draws logotype of the game
+        /// </summary>
+        private static void DrawLogotype()
+        {
+            Console.WriteLine(@" 
+ ║                                                                ║
+ ║  ╓─────╮  ╷     ╷  │╲    │  ╭─────╮  ╭─────  ╭─────╮  │╲    │  ║
+ ║  ║     │  │     │  │ ╲   │  │     │  │       │     │  │ ╲   │  ║
+ ║  ║     │  │     │  │  ╲  │  │  ╭──╮  ├─────  │     │  │  ╲  │  ║
+ ║  ║     │  │     │  │   ╲ │  │  ╵  │  │       │     │  │   ╲ │  ║
+ ║  ╙─────╯  ╰─────╯  │    ╲│  ╰─────╯  ╰─────  ╰─────╯  │    ╲│  ║ 
+ ║                                                                ║");
+
+            Console.WriteLine();
+        }
+
+        /// <summary>
         /// Get door's type at given position
         /// </summary>
         /// <param name="rooms">Array of rooms</param>
@@ -339,7 +356,7 @@ namespace Dungeon
         /// <summary>
         /// Check if the player passes through one of the vertical doors
         /// </summary>
-        private static bool IsPlayerPassThroughVerticalDoor()
+        private static bool CanPlayerPassThroughVerticalDoor()
         {
             return (MyX >= 18 && MyX <= 24);
         }
@@ -347,7 +364,7 @@ namespace Dungeon
         /// <summary>
         /// Check if the player passes through one of the horizontal doors
         /// </summary>
-        private static bool IsPlayerPassThroughHorizontalDoor()
+        private static bool CanPlayerPassThroughHorizontalDoor()
         {
             return (MyY >= 8 && MyY <= 10);
         }
@@ -460,16 +477,8 @@ namespace Dungeon
             string seed = "";
 
             Console.OutputEncoding = System.Text.Encoding.UTF8;
-            Console.WriteLine(@" 
- ║                                                                ║
- ║  ╓─────╮  ╷     ╷  │╲    │  ╭─────╮  ╭─────  ╭─────╮  │╲    │  ║
- ║  ║     │  │     │  │ ╲   │  │     │  │       │     │  │ ╲   │  ║
- ║  ║     │  │     │  │  ╲  │  │  ╭──╮  ├─────  │     │  │  ╲  │  ║
- ║  ║     │  │     │  │   ╲ │  │  ╵  │  │       │     │  │   ╲ │  ║
- ║  ╙─────╯  ╰─────╯  │    ╲│  ╰─────╯  ╰─────  ╰─────╯  │    ╲│  ║ 
- ║                                                                ║");
 
-            Console.WriteLine();
+            DrawLogotype();
 
             Console.CursorSize = 100;
 
@@ -522,8 +531,8 @@ namespace Dungeon
             while ((menu = Console.ReadKey(true).Key) != ConsoleKey.Enter) { }
             Console.Clear();
 
-            int[] enter_exit = { 2, 3, 0, 1 };
-            int[] enemy_spawn = { 10, 32, 4, 14 };
+            int[] enter_exit = { 2, 3, 0, 1 }; // 
+            int[] enemy_spawn = { 10, 32, 4, 14 }; // Vector[] enemySpawnCoordinates = { new(10, 4), new(32, 14) };
 
             int[,] rooms = new int[Convert.ToInt32(seed.Substring(0, 1)) + 2, 4];
 
@@ -564,9 +573,12 @@ namespace Dungeon
             {
                 ConsoleKey key = default;
 
-                if (Console.KeyAvailable) {
+                if (Console.KeyAvailable) 
+                {
                     key = Console.ReadKey(true).Key;
-                    while (Console.KeyAvailable) {
+
+                    while (Console.KeyAvailable) 
+                    {
                         Console.ReadKey();
                     }
                 }
@@ -579,7 +591,7 @@ namespace Dungeon
                     {
                         Move(Directions.Up);
                     }
-                    else if (IsPlayerPassThroughVerticalDoor() == true) 
+                    else if (CanPlayerPassThroughVerticalDoor() == true) 
                     {
                         if (IsDoorSimpleInCurrentRoomAt(rooms, PositionType.Top) == true) 
                         {
@@ -600,7 +612,7 @@ namespace Dungeon
                     {
                         Move(Directions.Right);
                     }
-                    else if (IsPlayerPassThroughHorizontalDoor() == true) 
+                    else if (CanPlayerPassThroughHorizontalDoor() == true) 
                     {
                         if (IsDoorSimpleInCurrentRoomAt(rooms, PositionType.Right) == true) 
                         {
@@ -621,7 +633,7 @@ namespace Dungeon
                     {
                         Move(Directions.Down);
                     } 
-                    else if (IsPlayerPassThroughVerticalDoor() == true) 
+                    else if (CanPlayerPassThroughVerticalDoor() == true) 
                     {
                         if (IsDoorSimpleInCurrentRoomAt(rooms, PositionType.Bottom) == true) 
                         {
@@ -642,7 +654,7 @@ namespace Dungeon
                     {
                         Move(Directions.Left);
                     }
-                    else if (IsPlayerPassThroughHorizontalDoor() == true) 
+                    else if (CanPlayerPassThroughHorizontalDoor() == true) 
                     {
                         if (IsDoorSimpleInCurrentRoomAt(rooms, PositionType.Left) == true) 
                         {
