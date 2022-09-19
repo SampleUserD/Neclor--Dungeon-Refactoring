@@ -38,7 +38,12 @@ namespace Dungeon
         /// The bottom bound is symmetrical to the top bound in relation to the center
         /// </summary>
         private static readonly Vector BottomBound = new(TopBound.X, TopBound.Y + Height);
-        
+
+        /// <summary>
+        /// Time of one frame in milliseconds
+        /// </summary>
+        private static readonly int OneFrameTime = 100;
+
         private static int rune = 0;
         private static int room = 0;
 
@@ -255,6 +260,31 @@ namespace Dungeon
         }
 
         /// <summary>
+        /// This method draws rune at given coordinates
+        /// </summary>
+        /// <param name="coordinates">given coordinates</param>
+        private static void DrawRuneAt(Vector coordinates)
+        {
+            RenderSymbolAt(coordinates, '@');
+        }
+
+        /// <summary>
+        /// This method draws rune at given coordinates
+        /// </summary>
+        /// <param name="coordinates">given coordinates</param>
+        private static void DrawRunePickUpIndicator(Vector coordinates)
+        {
+            var x = Convert.ToInt32(coordinates.X);
+            var y = Convert.ToInt32(coordinates.Y);
+
+            Console.SetCursorPosition(x, y);
+            Console.WriteLine(@"
+   ╔═══╗             
+   ║ @ ║
+   ╚═══╝");
+        }
+
+        /// <summary>
         /// This method draws logotype of the game
         /// </summary>
         private static void DrawLogotype()
@@ -319,6 +349,14 @@ namespace Dungeon
         private static bool IsPlayerWin()
         {
             return (rune == 1);
+        }
+
+        /// <summary>
+        /// Set player's victory to true
+        /// </summary>
+        private static void SetPlayerVictory()
+        {
+            rune = 1;
         }
 
         /// <summary>
@@ -470,8 +508,6 @@ namespace Dungeon
             while (true) { }
         }
 
-
-
         public static void Main()
         {
             string seed = "";
@@ -531,7 +567,7 @@ namespace Dungeon
             while ((menu = Console.ReadKey(true).Key) != ConsoleKey.Enter) { }
             Console.Clear();
 
-            int[] enter_exit = { 2, 3, 0, 1 }; // 
+            int[] enter_exit = { 2, 3, 0, 1 }; // Bottom, Left, Top, Right
             int[] enemy_spawn = { 10, 32, 4, 14 }; // Vector[] enemySpawnCoordinates = { new(10, 4), new(32, 14) };
 
             int[,] rooms = new int[Convert.ToInt32(seed.Substring(0, 1)) + 2, 4];
@@ -672,28 +708,26 @@ namespace Dungeon
 
                 DrawPlayer();
 
-                if (rune == 0 && room == Convert.ToInt32(seed.Substring(Convert.ToInt32(seed.Substring(0, 1)) + 2, 1))) {
-                    if (MyX == 21 && MyY == 9) {
-                        rune = 1;
+                if (IsPlayerWin() == false && room == Convert.ToInt32(seed.Substring(Convert.ToInt32(seed.Substring(0, 1)) + 2, 1))) 
+                {
+                    if (MyX == Center.X && MyY == Center.Y) 
+                    {
+                        SetPlayerVictory();
 
-                        Console.SetCursorPosition(0, 18);
-                        Console.WriteLine(@"
-   ╔═══╗             
-   ║ @ ║
-   ╚═══╝");
+                        DrawRunePickUpIndicator(new Vector(0, 18));
                     }
-                    else {
-                        Console.SetCursorPosition(21, 9);
-                        Console.WriteLine("@");
-                        Console.SetCursorPosition(0, 25);
+                    else 
+                    {
+                        DrawRuneAt(Center);
                     }
                 }
 
-                if (room != 0) {
+                if (room != 0) 
+                {
                     enemies[room].Move();
                 }
 
-                System.Threading.Thread.Sleep(100);
+                Thread.Sleep(OneFrameTime);
             }
         }
     }
